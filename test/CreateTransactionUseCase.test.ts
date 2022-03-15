@@ -17,9 +17,10 @@ describe('use-case: create transactions', () => {
             category: 'TED',
             transactionData: {}
         })
-        
-        expect(result.status).toBe('executed');
-        expect(result.transactionData.fee).toBe(4)
+        if(result.isRight()){
+            expect(result.value.status).toBe('executed');
+            expect(result.value.transactionData.fee).toBe(4)
+        }
     });
 
     test("should create transaction PIX equal executed and FEE equal 0", function () {
@@ -30,9 +31,14 @@ describe('use-case: create transactions', () => {
             category: 'PIX',
             transactionData: {}
         })
-        
-        expect(result.status).toBe('executed');
-        expect(result.transactionData.fee).toBe(0)
+
+        expect(result.isRight()).toBeTruthy()
+        expect(result.isLeft()).toBeFalsy()
+        if(result.isRight()){
+            expect(result.value.status).toBe('executed');
+            expect(result.value.transactionData.fee).toBe(0)
+        }
+
     });
 
 })

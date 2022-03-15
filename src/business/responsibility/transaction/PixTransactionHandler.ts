@@ -3,27 +3,21 @@ import { IError } from "../../../shared/IError";
 import { TransactionData, TransactionChain } from "./TransactionChain";
 
 
-export class FeeTransactionHandler extends TransactionChain {
+export class PixTransactionHandler extends TransactionChain {
 
 
     handle(request: TransactionData): Either<IError, TransactionData> {
         
-        const fee = this.calculateFee(request.category)
+        const pixKey = this.getPIXByKey(request)
         request.transactionData = {
             ...request.transactionData,
-            fee: fee
+            pixKey: pixKey
         }
         return super.handle(request);
     }
 
-
-    // call service calc fee
-    private calculateFee(category: string): number{
-        const operation: any = {
-            'TED': 4,
-            'PIX': 0
-        }
-        return operation[category]
+    private getPIXByKey(request: any): string{
+        return '999999'
     }
 
 

@@ -14,7 +14,7 @@ export class CreateTransactionUseCase {
         transactionCreateHandler
             .setNext(new FeeTransactionHandler())
             .setNext(new ExecuteTransactionHandler())
-        let transactionResultChain = transactionCreateHandler.handle(request)        
+        let transactionResultChain = transactionCreateHandler.handle(request)   
 
         return transactionResultChain
     }
