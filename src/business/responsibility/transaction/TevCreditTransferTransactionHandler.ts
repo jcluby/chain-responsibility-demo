@@ -3,21 +3,26 @@ import { ITransactionsRepository } from "../../repositories/ITransactionReposito
 import { TransactionData, TransactionChain, IErrorTransaction } from "./TransactionChain";
 
 
-export class CreateTransactionHandler extends TransactionChain {
+export class TevCreditTransactionHandler extends TransactionChain {
 
     constructor(private transactionRespository: ITransactionsRepository){
         super()
     }
 
     async handle(request: TransactionData): Promise<Either<IErrorTransaction, TransactionData>> {
-        request.status = 'create'
-        const dbTransaction = await this.transactionRespository.createTransaction()
-        const data = {
-            dbTransaction,
-            id: '123'
-        }
-        request.transactionData = data
         
+        const data = {
+            dbTransaction: request.transactionData.dbTransaction,
+            amount: request.amount,
+            type: 'credit',
+            ispbDestinyBank: 'bank'
+        }
+        
+        request.transactionData = data
+
+        await this.transactionRespository.create(request.transactionData, request.transactionData.dbTransaction)
+
         return super.handle(request);
     }
+
 }

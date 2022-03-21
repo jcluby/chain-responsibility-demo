@@ -1,17 +1,26 @@
 import { Either } from "../../../shared/Either";
-import { IError } from "../../../shared/IError";
-import { TransactionData, TransactionChain } from "./TransactionChain";
+import { TransactionData, TransactionChain, IErrorTransaction } from "./TransactionChain";
 
 
 export class ExecuteTransactionHandler extends TransactionChain {
 
-    handle(request: TransactionData): Either<IError, TransactionData> {
+
+    async handle(request: TransactionData): Promise<Either<IErrorTransaction, TransactionData>> {
         
         request.status = 'executed'
         request.transactionData = {
             ...request.transactionData,
             createAt: new Date()
         }
+
+        await this.dispatchTransaction(request.transactionData)
+        
+        await request.transactionData.dbTransaction.commit()
+       
         return super.handle(request);
+    }
+
+    private async dispatchTransaction(data: any): Promise<boolean>{
+        return Promise.resolve(true)
     }
 }

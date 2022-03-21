@@ -1,12 +1,11 @@
 import { Either } from "../../../shared/Either";
-import { IError } from "../../../shared/IError";
-import { TransactionData, TransactionChain } from "./TransactionChain";
+import { TransactionData, TransactionChain, IErrorTransaction } from "./TransactionChain";
 
 
 export class PixTransactionHandler extends TransactionChain {
 
 
-    handle(request: TransactionData): Either<IError, TransactionData> {
+    handle(request: TransactionData): Either<IErrorTransaction, TransactionData> | Promise<Either<IErrorTransaction, TransactionData>> {
         
         const pixKey = this.getPIXByKey(request)
         request.transactionData = {

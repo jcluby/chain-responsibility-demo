@@ -3,11 +3,11 @@ import { BalanceTransactionHandler } from "../../responsibility/transaction/Bala
 import { CreateTransactionHandler } from "../../responsibility/transaction/CreateTransactionHandler"
 import { ExecuteTransactionHandler } from "../../responsibility/transaction/ExecuteTransactionHandler"
 import { FeeTransactionHandler } from "../../responsibility/transaction/FeeTransactionHandler"
-import { LimitPixTransferTransactionHandler } from "../../responsibility/transaction/LimitPixTransferTransactionHandler"
-import { PixTransactionHandler } from "../../responsibility/transaction/PixTransactionHandler"
 import { RollbackTransactionHandler } from "../../responsibility/transaction/RollbackTransactionHandler"
+import { TevCreditTransactionHandler } from "../../responsibility/transaction/TevCreditTransferTransactionHandler"
+import { TevDebitTransactionHandler } from "../../responsibility/transaction/TevDebitTransferTransactionHandler"
 
-export class CreatePixTransferUseCase {
+export class CreateTevTransferUseCase {
 
     constructor(private transactionRepository: ITransactionsRepository) {
     }
@@ -19,17 +19,19 @@ export class CreatePixTransferUseCase {
         transactionCreateHandler
             .setNext(new BalanceTransactionHandler(this.transactionRepository))
             .setNext(new FeeTransactionHandler())
-            .setNext(new LimitPixTransferTransactionHandler())
-            .setNext(new PixTransactionHandler())
+            .setNext(new TevDebitTransactionHandler(this.transactionRepository))
             .setNext(new ExecuteTransactionHandler())
-        const transactionPixResultChain = await transactionCreateHandler.handle(request)
+            .setNext(new TevCreditTransactionHandler(this.transactionRepository))
+            .setNext(new ExecuteTransactionHandler())
+        const transactionTevResultChain = await transactionCreateHandler.handle(request)
         
-        if(transactionPixResultChain.isLeft()){
+        if(transactionTevResultChain.isLeft()){
             transactionCreateHandler.setNext(new RollbackTransactionHandler())
-            transactionCreateHandler.handle(transactionPixResultChain.value.data)
-            delete transactionPixResultChain.value.data
-        }        
-        return transactionPixResultChain
+            transactionCreateHandler.handle(transactionTevResultChain.value.data)
+            delete transactionTevResultChain.value.data
+        }
+               
+        return transactionTevResultChain
     }
 
 }

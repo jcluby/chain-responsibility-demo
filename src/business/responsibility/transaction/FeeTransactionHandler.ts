@@ -1,12 +1,11 @@
 import { Either } from "../../../shared/Either";
-import { IError } from "../../../shared/IError";
-import { TransactionData, TransactionChain } from "./TransactionChain";
+import { TransactionData, TransactionChain, IErrorTransaction } from "./TransactionChain";
 
 
 export class FeeTransactionHandler extends TransactionChain {
 
 
-    handle(request: TransactionData): Either<IError, TransactionData> {
+    handle(request: TransactionData): Either<IErrorTransaction, TransactionData> | Promise<Either<IErrorTransaction, TransactionData>> {
         
         const fee = this.calculateFee(request.category)
         request.transactionData = {
