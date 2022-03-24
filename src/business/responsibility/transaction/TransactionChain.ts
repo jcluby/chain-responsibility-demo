@@ -1,12 +1,15 @@
 import { Either, right } from "../../../shared/Either"
+import { IDatabaseTransaction } from "../../repositories/ITransactionRepository"
 
 export type TransactionData = {
     accountId: string
     balance?: number
-    status: string
+    status?: string
     category: string
     amount: number
-    transactionData: any
+    transactionDB: IDatabaseTransaction
+    data?: any
+    events: any[]
 }
 
 export interface IErrorTransaction {

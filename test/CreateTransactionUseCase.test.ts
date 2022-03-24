@@ -10,36 +10,17 @@ describe('use-case: create transactions', () => {
         createTransactionUseCase = new CreateTransactionUseCase(new TransactionRespository())
     })
 
-    test("should create transaction TED equal executed and FEE equal 4", async function () {
+    test("should create transaction TED not events", async function () {
     
         const result = await createTransactionUseCase.execute({
-            status: 'pending',
-            accountId: '123',
+            accountId: '001',
             category: 'TED',
-            transactionData: {}
+            amount: 200,
         })
-        if(result.isRight()){
-            expect(result.value.status).toBe('executed');
-            expect(result.value.transactionData.fee).toBe(4)
+        expect(result.isRight()).toBeFalsy()
+        if(result.isLeft()){
+            expect(result.value.code).toBe('111')
         }
-    });
-
-    test("should create transaction PIX equal executed and FEE equal 0", async function () {
-    
-        const result = await createTransactionUseCase.execute({
-            status: 'pending',
-            accountId: '123',
-            category: 'PIX',
-            transactionData: {}
-        })
-
-        expect(result.isRight()).toBeTruthy()
-        expect(result.isLeft()).toBeFalsy()
-        if(result.isRight()){
-            expect(result.value.status).toBe('executed');
-            expect(result.value.transactionData.fee).toBe(0)
-        }
-
     });
 
 })

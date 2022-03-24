@@ -4,8 +4,8 @@ import { CreateTransactionHandler } from "../../responsibility/transaction/Creat
 import { ExecuteTransactionHandler } from "../../responsibility/transaction/ExecuteTransactionHandler"
 import { FeeTransactionHandler } from "../../responsibility/transaction/FeeTransactionHandler"
 import { RollbackTransactionHandler } from "../../responsibility/transaction/RollbackTransactionHandler"
-import { TevCreditTransactionHandler } from "../../responsibility/transaction/TevCreditTransferTransactionHandler"
-import { TevDebitTransactionHandler } from "../../responsibility/transaction/TevDebitTransferTransactionHandler"
+import { TevCreditTransactionHandler } from "../../responsibility/transaction/tev/TevCreditTransferTransactionHandler"
+import { TevDebitTransactionHandler } from "../../responsibility/transaction/tev/TevDebitTransferTransactionHandler"
 
 export class CreateTevTransferUseCase {
 
@@ -20,7 +20,6 @@ export class CreateTevTransferUseCase {
             .setNext(new BalanceTransactionHandler(this.transactionRepository))
             .setNext(new FeeTransactionHandler())
             .setNext(new TevDebitTransactionHandler(this.transactionRepository))
-            .setNext(new ExecuteTransactionHandler())
             .setNext(new TevCreditTransactionHandler(this.transactionRepository))
             .setNext(new ExecuteTransactionHandler())
         const transactionTevResultChain = await transactionCreateHandler.handle(request)

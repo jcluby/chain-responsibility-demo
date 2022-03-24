@@ -12,6 +12,7 @@ export class BalanceTransactionHandler extends TransactionChain {
     async handle(request: TransactionData): Promise<Either<IErrorTransaction, TransactionData>> {
     
         const balance = await this.transactionRespository.getBalance(request.accountId)
+        request.balance = balance
         if(balance < request.amount){
             request.status = 'fail'
             return left({
@@ -21,7 +22,6 @@ export class BalanceTransactionHandler extends TransactionChain {
                 data: request
             })
         }
-        request.balance = balance
 
         return super.handle(request);
     }

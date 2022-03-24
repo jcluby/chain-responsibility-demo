@@ -7,7 +7,12 @@ export class RollbackTransactionHandler extends TransactionChain {
     async handle(request: TransactionData): Promise<Either<IErrorTransaction, TransactionData>> {
         
         request.status = 'fail'
-        await request.transactionData.dbTransaction.rollback()
+        
+        const { transactionId } = request.data
+        if(transactionId){
+            await request.transactionDB.rollback(transactionId)
+        }
+        
         return super.handle(request);
     }
 }

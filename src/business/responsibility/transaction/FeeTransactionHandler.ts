@@ -8,8 +8,8 @@ export class FeeTransactionHandler extends TransactionChain {
     handle(request: TransactionData): Either<IErrorTransaction, TransactionData> | Promise<Either<IErrorTransaction, TransactionData>> {
         
         const fee = this.calculateFee(request.category)
-        request.transactionData = {
-            ...request.transactionData,
+        request.data = {
+            ...request.data,
             fee: fee
         }
         return super.handle(request);

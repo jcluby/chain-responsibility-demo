@@ -3,8 +3,8 @@ import { BalanceTransactionHandler } from "../../responsibility/transaction/Bala
 import { CreateTransactionHandler } from "../../responsibility/transaction/CreateTransactionHandler"
 import { ExecuteTransactionHandler } from "../../responsibility/transaction/ExecuteTransactionHandler"
 import { FeeTransactionHandler } from "../../responsibility/transaction/FeeTransactionHandler"
-import { LimitPixTransferTransactionHandler } from "../../responsibility/transaction/LimitPixTransferTransactionHandler"
-import { PixTransactionHandler } from "../../responsibility/transaction/PixTransactionHandler"
+import { LimitPixTransferTransactionHandler } from "../../responsibility/transaction/pix/LimitPixTransferTransactionHandler"
+import { PixTransactionHandler } from "../../responsibility/transaction/pix/PixTransactionHandler"
 import { RollbackTransactionHandler } from "../../responsibility/transaction/RollbackTransactionHandler"
 
 export class CreatePixTransferUseCase {
@@ -20,7 +20,7 @@ export class CreatePixTransferUseCase {
             .setNext(new BalanceTransactionHandler(this.transactionRepository))
             .setNext(new FeeTransactionHandler())
             .setNext(new LimitPixTransferTransactionHandler())
-            .setNext(new PixTransactionHandler())
+            .setNext(new PixTransactionHandler(this.transactionRepository))
             .setNext(new ExecuteTransactionHandler())
         const transactionPixResultChain = await transactionCreateHandler.handle(request)
         

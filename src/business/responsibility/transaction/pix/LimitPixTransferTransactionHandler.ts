@@ -1,5 +1,5 @@
-import { Either, left } from "../../../shared/Either";
-import { TransactionData, TransactionChain, IErrorTransaction } from "./TransactionChain";
+import { Either, left } from "../../../../shared/Either";
+import { TransactionData, TransactionChain, IErrorTransaction } from "../TransactionChain";
 
 
 export class LimitPixTransferTransactionHandler extends TransactionChain {
@@ -9,8 +9,8 @@ export class LimitPixTransferTransactionHandler extends TransactionChain {
     handle(request: TransactionData): Either<IErrorTransaction, TransactionData> | Promise<Either<IErrorTransaction, TransactionData>>{
         
         const limit:boolean = this.checkLimit(request)
-        request.transactionData = {
-            ...request.transactionData,
+        request.data = {
+            ...request.data,
             limit: limit
         }
         if(limit){

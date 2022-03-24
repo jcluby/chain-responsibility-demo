@@ -13,12 +13,11 @@ describe('use-case: create transfer TEV', () => {
     test("should create transfer TEV", async function() {
 
         const result = await createTevTransferUseCase.execute({
-            status: 'pending',
-            accountId: '123',
+            accountId: '0001',
             category: 'TEV',
             amount: 1000,
-            transactionData: {}
         })
+        expect(result.isLeft()).toBeFalsy()
         if(result.isRight()){
             expect(result.value.status).toBe('executed')
         }
@@ -27,12 +26,11 @@ describe('use-case: create transfer TEV', () => {
     test("should create transfer TEV Insufficient balance", async function() {
 
         const result = await createTevTransferUseCase.execute({
-            status: 'pending',
-            accountId: '123',
+            accountId: '0002',
             category: 'TEV',
             amount: 7000000,
-            transactionData: {}
         })
+        expect(result.isRight()).toBeFalsy()
         if(result.isLeft()){
             expect(result.value.code).toBe('12')
         }
