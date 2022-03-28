@@ -10,7 +10,7 @@ export class RollbackTransactionHandler extends TransactionChain {
         
         const { transactionId } = request.data
         if(transactionId){
-            await request.transactionDB.rollback(transactionId)
+            await request.transactionDB.rollback(request.processId)
         }
         
         return super.handle(request);

@@ -30,15 +30,16 @@ export class ExecuteTransactionHandler extends TransactionChain {
             
             const result = await this.dispatchTransaction(item)
 
-            await request.transactionDB.commit(item.transactionId)
-
+            
             if (result.isLeft()) {
                 return left({
                     ...result.value,
                     data: request
                 })
             }
-        }        
+        }
+
+        await request.transactionDB.commit(request.processId)
         request.status = 'executed'
         
         return super.handle(request);

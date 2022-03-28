@@ -2,6 +2,7 @@ import { Either, right } from "../../../shared/Either"
 import { IDatabaseTransaction } from "../../repositories/ITransactionRepository"
 
 export type TransactionData = {
+    processId: string
     accountId: string
     balance?: number
     status?: string
